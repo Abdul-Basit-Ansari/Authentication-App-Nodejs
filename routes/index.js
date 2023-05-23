@@ -12,7 +12,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 router.use('/auth',auth)
 
-app.use(authenticate);
-router.use('/users',user)
+// app.use(authenticate);
+router.use('/users',authenticate,user)
 
 export default router
