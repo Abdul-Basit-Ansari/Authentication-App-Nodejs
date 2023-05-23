@@ -2,15 +2,15 @@ import jwt  from 'jsonwebtoken'
 
 const authenticate = (req, res, next) => {
   const SECRET = process.env.SECRET || "topsecret";
-  console.log("req.header: ", req.cookies);
-
-  if (!req.cookies.Token) {
+  let authToken = req.headers.authorization.slice(7)
+  console.log("req.header: ", authToken);
+  if (!authToken) {
       res.status(401).send({
           message: "include http-only credentials with every request"
       })
       return;
   }
-  jwt.verify(req.cookies.Token, SECRET, function (err, decodedData) {
+  jwt.verify(authToken, SECRET, function (err, decodedData) {
       if (!err) {
 
           console.log("decodedData: ", decodedData);
@@ -23,7 +23,7 @@ const authenticate = (req, res, next) => {
 
               console.log("token approved");
 
-              req.cookies.Token = decodedData
+              authToken = decodedData
               next();
           }
       } else {
